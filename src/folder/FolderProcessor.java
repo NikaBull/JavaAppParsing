@@ -2,15 +2,16 @@ package nikita.parsit.papki.com.folder;
 
 import nikita.parsit.papki.com.exceptions.FileExtensionNotFoundException;
 import nikita.parsit.papki.com.fileprocessor.FileProcessor;
+import nikita.parsit.papki.com.fileprocessor.OdtFileProcessor;
 import nikita.parsit.papki.com.fileprocessor.TxtFileProcessor;
 import nikita.parsit.papki.com.fileprocessor.WordFileProcessor;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,17 +23,17 @@ public class FolderProcessor implements Runnable {
 
     private boolean stop = false;
     private final ESSaver esSaver;
-    private final Map<String, FileProcessor> extensionToProcessor = Map.of(
-            "txt", new TxtFileProcessor(),
-            "doc", new WordFileProcessor(),
-            "docx", new WordFileProcessor()
-
-    );
-
+    private final Map<String, FileProcessor> extensionToProcessor;
 
     public FolderProcessor(Path folderPath, ESSaver esSaver) throws IOException {
         this.esSaver = esSaver;
         this.folderPath = folderPath;
+        extensionToProcessor = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        extensionToProcessor.put("txt", new TxtFileProcessor());
+        FileProcessor wordProcessor = new WordFileProcessor();
+        extensionToProcessor.put("doc", wordProcessor);
+        extensionToProcessor.put("docx", wordProcessor);
+        extensionToProcessor.put("odt", new OdtFileProcessor());
 
         initFolder();
     }
