@@ -1,10 +1,8 @@
 package nikita.parsit.papki.com.folder;
 
 import nikita.parsit.papki.com.exceptions.FileExtensionNotFoundException;
-import nikita.parsit.papki.com.fileprocessor.FileProcessor;
-import nikita.parsit.papki.com.fileprocessor.OdtFileProcessor;
-import nikita.parsit.papki.com.fileprocessor.TxtFileProcessor;
-import nikita.parsit.papki.com.fileprocessor.WordFileProcessor;
+import nikita.parsit.papki.com.fileprocessor.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -34,7 +32,7 @@ public class FolderProcessor implements Runnable {
         extensionToProcessor.put("doc", wordProcessor);
         extensionToProcessor.put("docx", wordProcessor);
         extensionToProcessor.put("odt", new OdtFileProcessor());
-
+        extensionToProcessor.put("pdf", new PdfFileProcessor());
         initFolder();
     }
 
